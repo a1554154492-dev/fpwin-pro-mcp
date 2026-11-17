@@ -1,0 +1,13 @@
+{
+    "mcpServers":  {
+                       "fpwin-pro":  {
+                                         "args":  [
+                                                      "C:\\work\\fpwin-mcp\\server.js"
+                                                  ],
+                                         "env":  {
+                                                     "FPWIN_ROOT":  "D:\\FP7752"
+                                                 },
+                                         "command":  "C:\\path\\to\\node.exe"
+                                     }
+                   }
+}

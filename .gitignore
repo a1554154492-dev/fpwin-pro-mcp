@@ -1,0 +1,21 @@
+# Reverse-engineering scratch space (generated probes, dumps, diffs, screenshots)
+work/
+
+# Panasonic sample projects and IDE-produced artifacts are not redistributed.
+# Put your own copies here locally: fixtures/*.pro, fixtures/*.asc, ... (see fixtures/README.md)
+fixtures/*.pro
+fixtures/*.proV6
+fixtures/*.asc
+fixtures/*.bak
+fixtures/*.ini
+fixtures/*.log
+fixtures/samples/
+
+# Local scratch
+args-*.json
+.tools/
+node_modules/
+*.tmp
+
+# Internal session handoff notes (contain local paths / project names)
+HANDOFF-*.md
