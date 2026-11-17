@@ -1,21 +1,43 @@
 # FPWIN Pro MCP server
 
-A Model Context Protocol server for **Panasonic Control FPWIN Pro 7** (v7.5.2.0, the
-CoDeSys‑2.3‑derived Panasonic IDE), built from REA‑assisted reverse engineering of the
-local installation instead of an official API — because none is registered.
+Unofficial Model Context Protocol server and **offline `.pro` parser** for
+**Panasonic Control FPWIN Pro 7** (v7.5.2.0, the CoDeSys‑2.3‑derived Panasonic IDE).
 
-- Transport: MCP **stdio**, newline‑delimited JSON‑RPC 2.0
-- Runtime: Node.js ≥ 18, **zero npm dependencies**
-- Platform: Windows (uses Win32 windows + the shipped 32‑bit IDE)
+FPWIN Pro ships **no scripting, COM or documented batch API** — nothing is registered in
+`HKLM\Classes`, and the IDE is a plain 32‑bit MFC application. This project was built by
+reverse engineering the local installation (PE imports/exports, string corpora over the 92
+shipped binaries, `.pro` container scans, minidumps and black‑box runs) and exposes the
+result in two forms:
+
+- **An MCP server** — an agent can inspect the installation, drive the real IDE window,
+  run the verified snapshot/batch paths, and ask for project structure in one call.
+- **A standalone parser/CLI** — decode a `.pro` file with no IDE at all: object tree, POU
+  source text, variable declarations, DUT fields, global variables, task bindings and SFC
+  charts (see [PRO-FORMAT.md](PRO-FORMAT.md) for the byte-level notes).
+
+| | |
+|---|---|
+| Transport | MCP **stdio**, newline‑delimited JSON‑RPC 2.0 |
+| Runtime | Node.js ≥ 18, **zero npm dependencies** |
+| Platform | Windows (Win32 window automation + the shipped 32‑bit IDE) |
+| Inputs | `.pro` (SC container), `.asc` (CoDeSys ASCII export, two dialects) |
+| Verified on | FPWIN Pro 7.5.2.0 — 27 shipped `.pro`/`.asc` pairs, 42 containers, 0 parse errors |
 
 ```
 fpwin-mcp/
-├─ server.js        MCP server + offline parsers (single file, no deps)
-├─ winui.ps1        Win32 window/dialog enumeration + button click (helper)
-├─ probe32.ps1      32-bit LoadLibrary probe (MEWNET runtime diagnosis)
-├─ test/smoke.js    JSON-RPC smoke client
-└─ fixtures/        sample .asc / .pro inputs
+├─ server.js        MCP server (single file, no deps)
+├─ lib/proparse.js  .pro container/object/declaration/SFC decoder
+├─ lib/mewtocol.js  MEWTOCOL‑COM / MEWNET client
+├─ proparse-cli.js  standalone CLI (JSON, bodies, coverage)
+├─ PRO-FORMAT.md    reverse-engineered format notes
+├─ test/            protocol, parser and sample-pair assertions
+└─ tools/           probes used to derive the format
 ```
+
+> **Not affiliated with Panasonic.** This is an interoperability project derived from
+> observed behaviour; [PRO-FORMAT.md](PRO-FORMAT.md) documents observations, not vendor
+> specification. Panasonic sample projects are not redistributed — see
+> [fixtures/README.md](fixtures/README.md).
 
 ## What the reverse engineering established
 
